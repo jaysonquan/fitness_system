@@ -1,0 +1,43 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>新增饮食记录</title>
+</head>
+<body>
+    <h1>新增饮食记录</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        <p>饮食日期：<input type="date" name="record_date"></p>
+        <p>食物名称：<input type="text" name="food_name"></p>
+        <p>数量：<input type="number" step="0.1" name="quantity"></p>
+        <p>总热量：<input type="number" step="0.1" name="total_calories"></p>
+        <p>
+            餐次：
+            <select name="meal_type">
+                <option value="">请选择</option>
+                <option value="早餐">早餐</option>
+                <option value="午餐">午餐</option>
+                <option value="晚餐">晚餐</option>
+                <option value="加餐">加餐</option>
+            </select>
+        </p>
+        <p>备注：<input type="text" name="remarks"></p>
+        <p><button type="submit">保存</button></p>
+    </form>
+
+    <p><a href="{{ url_for('diet_records') }}">返回饮食记录列表</a></p>
+</body>
+</html>

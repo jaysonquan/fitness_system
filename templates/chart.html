@@ -1,0 +1,59 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>体重趋势图</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>体重趋势图</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <p>当前用户：{{ user.username }}</p>
+    <p><a href="{{ url_for('student_dashboard') }}">返回学生主页</a></p>
+
+    {% if dates and weights %}
+        <canvas id="weightChart" width="800" height="400"></canvas>
+
+        <script>
+            const labels = {{ dates | tojson }};
+            const data = {{ weights | tojson }};
+
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '体重（kg）',
+                        data: data,
+                        fill: false,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        </script>
+    {% else %}
+        <p>暂时还没有身体指标数据，无法生成体重趋势图。</p>
+    {% endif %}
+</body>
+</html>

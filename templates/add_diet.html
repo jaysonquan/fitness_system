@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>添加饮食记录</h3>
+
+<form method="post" class="card p-4 shadow-sm">
+    <label>日期</label>
+    <input class="form-control mb-3" type="date" name="date" required>
+
+    <label>食物名称</label>
+    <input class="form-control mb-3" name="food_name" required>
+
+    <label>摄入量</label>
+    <input class="form-control mb-3" name="amount" placeholder="如：200g / 一碗">
+
+    <label>总热量 kcal</label>
+    <input class="form-control mb-3" type="number" name="calories" required>
+
+    <button class="btn btn-primary">保存</button>
+</form>
+
+{% endblock %}

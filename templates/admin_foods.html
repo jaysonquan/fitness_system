@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>食物库管理</h3>
+
+<form method="post" class="card p-4 shadow-sm mb-4">
+    <label>食物名称</label>
+    <input class="form-control mb-3" name="name" required>
+
+    <label>每100g热量 kcal</label>
+    <input class="form-control mb-3" type="number" name="calories_per_100g" required>
+
+    <button class="btn btn-primary">添加食物</button>
+</form>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>食物名称</th>
+        <th>每100g热量</th>
+        <th>操作</th>
+    </tr>
+
+    {% for f in foods %}
+    <tr>
+        <td>{{ f.name }}</td>
+        <td>{{ f.calories_per_100g }} kcal</td>
+        <td>
+            <a class="btn btn-sm btn-danger" href="{{ url_for('delete_food', food_id=f.id) }}" onclick="return confirm('确定删除吗？')">删除</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

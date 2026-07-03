@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">管理员后台总览</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm mb-3">
+            <div class="card-body">
+                <h5>学生总数</h5>
+                <h2>{{ user_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm mb-3">
+            <div class="card-body">
+                <h5>训练记录</h5>
+                <h2>{{ workout_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm mb-3">
+            <div class="card-body">
+                <h5>饮食记录</h5>
+                <h2>{{ diet_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm mb-3">
+            <div class="card-body">
+                <h5>食物库数量</h5>
+                <h2>{{ food_count }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>健身计划总数</h4>
+                <h2>{{ plan_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>快捷管理</h4>
+                <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ url_for('admin_users') }}">学生管理</a>
+                <a class="btn btn-success btn-sm me-2 mb-2" href="{{ url_for('admin_foods') }}">食物库管理</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

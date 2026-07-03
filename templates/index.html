@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>校园健身饮食辅助管理系统</title>
+</head>
+<body>
+    <h1>面向大学生的健身与饮食辅助管理信息系统</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <p><a href="{{ url_for('student_register') }}">学生注册</a></p>
+    <p><a href="{{ url_for('student_login') }}">学生登录</a></p>
+    <p><a href="{{ url_for('admin_login') }}">管理员登录</a></p>
+</body>
+</html>

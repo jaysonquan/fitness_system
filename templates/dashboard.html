@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">欢迎你，{{ user.username }}</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm mb-3">
+            <div class="card-body">
+                <h5>训练次数</h5>
+                <h2>{{ workout_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm mb-3">
+            <div class="card-body">
+                <h5>饮食记录</h5>
+                <h2>{{ diet_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm mb-3">
+            <div class="card-body">
+                <h5>计划完成率</h5>
+                <h2>{{ plan_completion_rate }}%</h2>
+                <small class="text-muted">{{ completed_plan_count }} / {{ plan_count }}</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm mb-3">
+            <div class="card-body">
+                <h5>当前体重</h5>
+                <h2>
+                    {% if latest_body %}
+                        {{ latest_body.weight }} kg
+                    {% else %}
+                        -
+                    {% endif %}
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>最近7天训练次数</h4>
+                <canvas id="workoutChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>热量摄入 vs 运动消耗</h4>
+                <canvas id="calorieChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>体重趋势</h4>
+                <canvas id="weightChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>热量概览</h4>
+                <p>累计摄入热量：{{ total_intake }} kcal</p>
+                <p>累计运动消耗：{{ total_burned }} kcal</p>
+
+                {% if total_intake > total_burned %}
+                    <div class="alert alert-info">当前摄入热量高于消耗，适合增肌阶段或需要控制饮食。</div>
+                {% else %}
+                    <div class="alert alert-success">当前运动消耗较高，适合减脂阶段。</div>
+                {% endif %}
+
+                <h5 class="mt-4">快捷入口</h5>
+                <a class="btn btn-primary btn-sm me-2 mb-2" href="{{ url_for('add_workout') }}">添加训练</a>
+                <a class="btn btn-success btn-sm me-2 mb-2" href="{{ url_for('add_diet') }}">添加饮食</a>
+                <a class="btn btn-warning btn-sm me-2 mb-2" href="{{ url_for('add_body') }}">添加身体指标</a>
+                <a class="btn btn-dark btn-sm me-2 mb-2" href="{{ url_for('add_plan') }}">添加计划</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="chart-labels" type="application/json">{{ chart_labels | default([]) | tojson }}</script>
+<script id="workout-data" type="application/json">{{ workout_chart_data | default([]) | tojson }}</script>
+<script id="intake-data" type="application/json">{{ intake_chart_data | default([]) | tojson }}</script>
+<script id="burned-data" type="application/json">{{ burned_chart_data | default([]) | tojson }}</script>
+<script id="body-labels" type="application/json">{{ body_chart_labels | default([]) | tojson }}</script>
+<script id="body-weights" type="application/json">{{ body_chart_weights | default([]) | tojson }}</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const labels = JSON.parse(document.getElementById("chart-labels").textContent);
+const workoutData = JSON.parse(document.getElementById("workout-data").textContent);
+const intakeData = JSON.parse(document.getElementById("intake-data").textContent);
+const burnedData = JSON.parse(document.getElementById("burned-data").textContent);
+const bodyLabels = JSON.parse(document.getElementById("body-labels").textContent);
+const bodyWeights = JSON.parse(document.getElementById("body-weights").textContent);
+
+new Chart(document.getElementById("workoutChart"), {
+    type: "bar",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "训练次数",
+            data: workoutData,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        }
+    }
+});
+
+new Chart(document.getElementById("calorieChart"), {
+    type: "line",
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: "摄入热量",
+                data: intakeData,
+                borderWidth: 2,
+                tension: 0.3
+            },
+            {
+                label: "运动消耗",
+                data: burnedData,
+                borderWidth: 2,
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+new Chart(document.getElementById("weightChart"), {
+    type: "line",
+    data: {
+        labels: bodyLabels,
+        datasets: [{
+            label: "体重 kg",
+            data: bodyWeights,
+            borderWidth: 2,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

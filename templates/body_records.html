@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="mb-3">身体指标</h3>
+
+<a class="btn btn-primary mb-3" href="{{ url_for('add_body') }}">添加身体指标</a>
+
+<div class="card p-4 mb-4 shadow-sm">
+    <h5>体重趋势图</h5>
+    <canvas id="weightChart"></canvas>
+</div>
+
+<table class="table table-bordered table-hover bg-white">
+    <thead class="table-light">
+        <tr>
+            <th>日期</th>
+            <th>体重</th>
+            <th>BMI</th>
+            <th>腰围</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in records %}
+        <tr>
+            <td>{{ r.date }}</td>
+            <td>{{ r.weight }} kg</td>
+            <td>{{ r.bmi if r.bmi else '-' }}</td>
+            <td>{{ r.waist if r.waist else '-' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-center text-muted">暂无身体指标记录</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script id="weight-labels-data" type="application/json">{{ labels | default([]) | tojson }}</script>
+<script id="weight-values-data" type="application/json">{{ weights | default([]) | tojson }}</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById("weightChart");
+const labels = JSON.parse(document.getElementById("weight-labels-data").textContent);
+const weights = JSON.parse(document.getElementById("weight-values-data").textContent);
+
+new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "体重 kg",
+            data: weights,
+            borderWidth: 2,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

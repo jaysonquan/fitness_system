@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-sm mt-4">
+            <div class="card-body p-4">
+                <h3 class="mb-4">添加训练记录</h3>
+
+                <form method="post" action="{{ url_for('add_workout') }}">
+                    <div class="mb-3">
+                        <label class="form-label">训练日期</label>
+                        <input class="form-control" type="date" name="date" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">训练项目</label>
+                        <input class="form-control" type="text" name="item" placeholder="如：篮球、跑步、深蹲、卧推" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">训练时长 / 分钟</label>
+                        <input class="form-control" type="number" name="duration" placeholder="如：60" min="0">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">完成情况</label>
+                        <select class="form-control" name="status">
+                            <option value="已完成">已完成</option>
+                            <option value="部分完成">部分完成</option>
+                            <option value="未完成">未完成</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">消耗热量 / kcal</label>
+                        <input class="form-control" type="number" name="calories" placeholder="如：300" min="0" value="0">
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" type="submit">保存记录</button>
+                        <a class="btn btn-secondary" href="{{ url_for('workouts') }}">返回列表</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

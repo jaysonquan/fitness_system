@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>学生管理</h3>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>ID</th>
+        <th>用户名</th>
+        <th>年龄</th>
+        <th>身高</th>
+        <th>体重</th>
+        <th>目标</th>
+    </tr>
+
+    {% for u in users %}
+    <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.age }}</td>
+        <td>{{ u.height }}</td>
+        <td>{{ u.weight }}</td>
+        <td>{{ u.goal }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

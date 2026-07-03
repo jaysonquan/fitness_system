@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>学生主页</title>
+</head>
+<body>
+    <h1>学生主页</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <p>欢迎你，{{ user.username }}</p>
+
+    <h3>当前个人信息</h3>
+    <ul>
+        <li>姓名：{{ user.real_name or '未填写' }}</li>
+        <li>性别：{{ user.gender or '未填写' }}</li>
+        <li>年龄：{{ user.age or '未填写' }}</li>
+        <li>身高：{{ user.height or '未填写' }}</li>
+        <li>体重：{{ user.weight or '未填写' }}</li>
+        <li>运动基础：{{ user.fitness_level or '未填写' }}</li>
+        <li>每周训练天数：{{ user.weekly_days or '未填写' }}</li>
+        <li>健身目标：{{ user.goal_type or '未填写' }}</li>
+    </ul>
+
+    <p>功能入口：</p>
+    <ul>
+        <li><a href="{{ url_for('edit_profile') }}">编辑个人资料</a></li>
+        <li><a href="{{ url_for('workout_records') }}">训练记录</a></li>
+        <li><a href="{{ url_for('diet_records') }}">饮食记录</a></li>
+        <li><a href="{{ url_for('body_records') }}">身体指标</a></li>
+        <li><a href="{{ url_for('workout_plans') }}">健身计划</a></li>
+        <li><a href="{{ url_for('student_chart') }}">体重趋势图</a></li>
+    </ul>
+
+    <p><a href="{{ url_for('logout') }}">退出登录</a></p>
+</body>
+</html>

@@ -1,0 +1,34 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>新增身体指标</title>
+</head>
+<body>
+    <h1>新增身体指标</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        <p>记录日期：<input type="date" name="record_date"></p>
+        <p>体重（kg）：<input type="number" step="0.1" name="weight"></p>
+        <p>BMI：<input type="number" step="0.1" name="bmi"></p>
+        <p>腰围：<input type="number" step="0.1" name="waist"></p>
+        <p>臀围：<input type="number" step="0.1" name="hip"></p>
+        <p>备注：<input type="text" name="remarks"></p>
+        <p><button type="submit">保存</button></p>
+    </form>
+
+    <p><a href="{{ url_for('body_records') }}">返回身体指标列表</a></p>
+</body>
+</html>

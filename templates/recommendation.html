@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">智能健身推荐</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body text-center">
+                <h5>当前目标</h5>
+                <h2>{{ user.goal if user.goal else '未设置' }}</h2>
+                <p class="text-muted mb-0">系统会根据你的目标、训练记录、热量和 BMI 生成建议</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body text-center">
+                <h5>BMI</h5>
+                <h2>{{ bmi if bmi else '-' }}</h2>
+                <p class="text-muted mb-0">根据最新身体指标自动计算</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body text-center">
+                <h5>热量差</h5>
+                <h2>{{ total_intake - total_burned }} kcal</h2>
+                <p class="text-muted mb-0">摄入热量 - 运动消耗</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">个性化建议</h4>
+
+        {% if suggestions %}
+            <div class="list-group">
+                {% for item in suggestions %}
+                    <div class="list-group-item d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3">{{ loop.index }}</span>
+                        <span>{{ item }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info mb-0">
+                当前数据较少，请先补充个人信息、身体指标、训练记录和饮食记录，系统会生成更准确的推荐。
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">动作示范视频</h4>
+        <p class="text-muted">系统会根据你的健身目标推荐对应训练动作的 B站教学视频，帮助你学习正确动作。</p>
+
+        {% if videos %}
+            <div class="row">
+                {% for v in videos %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="mb-3">{{ v.title }}</h5>
+                            <div class="ratio ratio-16x9">
+                                <iframe
+                                    src="{{ v.url }}"
+                                    allowfullscreen="allowfullscreen"
+                                    scrolling="no"
+                                    border="0"
+                                    frameborder="no"
+                                    framespacing="0">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info mb-0">
+                暂无推荐视频。请先在个人信息中设置目标，例如：减脂、增肌或塑形。
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">推荐逻辑说明</h4>
+        <p>本系统采用简单规则推荐方法，根据用户的健身目标、BMI、训练频率和热量摄入消耗情况生成建议。</p>
+        <ul>
+            <li>减脂用户：关注热量控制和有氧运动频率。</li>
+            <li>增肌用户：关注力量训练、热量盈余和蛋白质摄入。</li>
+            <li>塑形用户：关注力量训练和有氧训练的平衡。</li>
+            <li>BMI 偏高或偏低时，系统会给出对应调整建议。</li>
+        </ul>
+        <p class="text-muted mb-0">这是一个规则型推荐系统，适合作为课程设计中的智能化功能亮点。</p>
+    </div>
+</div>
+
+<div class="d-flex gap-2">
+    <a class="btn btn-primary" href="{{ url_for('dashboard') }}">返回数据首页</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('profile') }}">完善个人信息</a>
+    <a class="btn btn-outline-success" href="{{ url_for('add_body') }}">添加身体指标</a>
+</div>
+
+{% endblock %}

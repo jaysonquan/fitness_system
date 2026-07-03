@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>训练记录</h3>
+
+<a class="btn btn-primary mb-3" href="{{ url_for('add_workout') }}">添加训练记录</a>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>日期</th>
+        <th>训练项目</th>
+        <th>时长</th>
+        <th>完成情况</th>
+        <th>消耗热量</th>
+    </tr>
+
+    {% for r in records %}
+    <tr>
+        <td>{{ r.date }}</td>
+        <td>{{ r.item }}</td>
+        <td>{{ r.duration }} 分钟</td>
+        <td>{{ r.status }}</td>
+        <td>{{ r.calories }} kcal</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

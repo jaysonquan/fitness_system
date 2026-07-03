@@ -1,0 +1,60 @@
+
+
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">训练质量评分</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body text-center">
+        <h5>综合评分</h5>
+        <h1 class="display-4">{{ total_score }} 分</h1>
+        <h4 class="mt-2">等级：{{ level }}</h4>
+        <p class="text-muted">{{ comment }}</p>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">评分构成</h4>
+
+        {% for item in score_items %}
+        {% set percent = (item.score / item.max) * 100 %}
+        <div class="mb-3">
+            <div class="d-flex justify-content-between">
+                <span>{{ item.name }}</span>
+                <span>{{ item.score }} / {{ item.max }}</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" data-percent="{{ percent }}"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">数据概览</h4>
+        <ul>
+            <li>训练记录数：{{ workout_count }}</li>
+            <li>饮食记录数：{{ diet_count }}</li>
+            <li>身体指标记录数：{{ body_count }}</li>
+            <li>计划总数：{{ plan_count }}</li>
+            <li>已完成计划：{{ completed_plan_count }}</li>
+        </ul>
+    </div>
+</div>
+
+<div class="d-flex gap-2">
+    <a class="btn btn-primary" href="{{ url_for('dashboard') }}">返回数据首页</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('recommendation') }}">查看智能推荐</a>
+</div>
+
+<script>
+document.querySelectorAll(".progress-bar[data-percent]").forEach(function (bar) {
+    const percent = Number(bar.dataset.percent || 0);
+    bar.style.width = percent + "%";
+});
+</script>
+{% endblock %}

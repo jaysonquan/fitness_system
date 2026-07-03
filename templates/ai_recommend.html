@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">AI智能推荐分析</h2>
+
+<div class="card shadow-sm mb-4 text-center">
+    <div class="card-body">
+        <h5>AI综合评分</h5>
+        <h1 class="display-4">{{ ai_score }} 分</h1>
+        <h4 class="mt-2">用户类型：{{ model_result }}</h4>
+        {% if bmi %}
+            <p class="text-muted mb-0">当前 BMI：{{ bmi }}</p>
+        {% else %}
+            <p class="text-muted mb-0">暂无 BMI 数据，请先添加身体指标。</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">模型分析结果</h4>
+        <p class="mb-0">{{ recommendation_text }}</p>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">推荐训练动作</h4>
+        <div class="row">
+            {% for action in recommended_actions %}
+            <div class="col-md-3 mb-3">
+                <div class="card h-100 shadow-sm text-center">
+                    <div class="card-body">
+                        <h5>{{ action }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">特征权重（模拟AI）</h4>
+        <p class="text-muted">系统将训练频率、饮食记录、身体指标、计划完成率和热量管理转化为特征分数，并进行加权计算。</p>
+
+        <div class="mb-2">训练频率</div>
+        <div class="progress mb-3">
+            <div class="progress-bar" data-percent="{{ features.training_frequency * 100 }}"></div>
+        </div>
+
+        <div class="mb-2">饮食记录</div>
+        <div class="progress mb-3">
+            <div class="progress-bar bg-success" data-percent="{{ features.diet_tracking * 100 }}"></div>
+        </div>
+
+        <div class="mb-2">身体指标记录</div>
+        <div class="progress mb-3">
+            <div class="progress-bar bg-info" data-percent="{{ features.body_tracking * 100 }}"></div>
+        </div>
+
+        <div class="mb-2">计划完成率</div>
+        <div class="progress mb-3">
+            <div class="progress-bar bg-warning" data-percent="{{ features.plan_completion * 100 }}"></div>
+        </div>
+
+        <div class="mb-2">热量管理</div>
+        <div class="progress mb-3">
+            <div class="progress-bar bg-danger" data-percent="{{ features.calorie_balance * 100 }}"></div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="mb-3">DeepSeek AI智能分析（真实大模型）</h4>
+
+        {% if deepseek_advice %}
+            <div class="alert alert-success">
+                <pre style="white-space: pre-wrap; font-family: inherit;">{{ deepseek_advice }}</pre>
+            </div>
+        {% elif deepseek_error %}
+            <div class="alert alert-warning">
+                {{ deepseek_error }}
+            </div>
+        {% else %}
+            <div class="text-muted">正在生成AI建议...</div>
+        {% endif %}
+    </div>
+</div>
+<div class="d-flex gap-2">
+    <a class="btn btn-primary" href="{{ url_for('dashboard') }}">返回数据首页</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('recommendation') }}">返回智能推荐</a>
+    <a class="btn btn-outline-success" href="{{ url_for('score') }}">查看训练评分</a>
+</div>
+
+<script>
+document.querySelectorAll(".progress-bar[data-percent]").forEach(function (bar) {
+    const percent = Number(bar.dataset.percent || 0);
+    bar.style.width = percent + "%";
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,4 @@
+Flask
+Flask-SQLAlchemy
+openai
+python-dotenv
